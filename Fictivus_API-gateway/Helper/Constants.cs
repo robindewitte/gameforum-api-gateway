@@ -1,5 +1,5 @@
 ﻿using System;
-namespace twatter_API_gateway.Helper
+namespace Fictivus_API_gateway.Helper
 {
     public static class Constants
     {

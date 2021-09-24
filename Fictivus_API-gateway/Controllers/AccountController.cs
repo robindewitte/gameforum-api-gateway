@@ -24,9 +24,8 @@ namespace Fictivus_API_gateway.Controllers
         [Route("login")]
         public async Task<ActionResult<string>> Login(LoginDTO loginDTO)
         {
-            return "Works for now";
-            /*
-            IFlurlResponse response = await $"{twatter_API_gateway.Helper.Constants.AccountApiUrl}/api/user/login".PostJsonAsync(loginDTO);
+            
+            IFlurlResponse response = await $"{Constants.AccountApiUrl}/api/user/login".PostJsonAsync(loginDTO);
 
             if (response.StatusCode >= 500)
             {
@@ -41,7 +40,6 @@ namespace Fictivus_API_gateway.Controllers
                 string answer = await response.GetStringAsync();
                 return answer;
             }
-            */
         }
 
 
@@ -56,9 +54,7 @@ namespace Fictivus_API_gateway.Controllers
         [Route("register")]
         public async Task<ActionResult<string>> Register(RegisterDTO registerDTO)
         {
-            return registerDTO.Username;
-            /*
-            IFlurlResponse response = await $"{twatter_API_gateway.Helper.Constants.AccountApiUrl}/api/user/register".PostJsonAsync(registerDTO);
+            IFlurlResponse response = await $"{Constants.AccountApiUrl}/api/user/register".PostJsonAsync(registerDTO);
             if (response.StatusCode >= 500)
             {
                 return StatusCode(500);
@@ -72,7 +68,6 @@ namespace Fictivus_API_gateway.Controllers
                 string answer = await response.GetStringAsync();
                 return answer;
             }
-            */
         }
     }
 }

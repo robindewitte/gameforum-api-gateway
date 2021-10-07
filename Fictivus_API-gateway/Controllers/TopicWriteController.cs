@@ -1,0 +1,53 @@
+﻿using Fictivus_API_gateway.DTO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Fictivus_API_gateway.Controllers
+{
+    [Produces("application/json")]
+    [Route("api/write")]
+    [ApiController]
+    public class TopicWriteController : Controller
+    {
+        //moet niet anonymous zijn in toekomst
+        [AllowAnonymous]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("writeMock")]
+        public async Task<ActionResult<string>> WriteMocke(TopicDTO topicDTO)
+        {
+            //moet DTO kunnen verzenden
+            /*
+            Messaging.MessageSender.SendMessage()
+            */
+
+            return "verzonden";
+            
+        }
+
+        //moet niet anonymous zijn in toekomst
+        [AllowAnonymous]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("deleteMock")]
+        public async Task<ActionResult<string>> DeleteMocke(TopicDTO topicDTO)
+        {
+            //moet DTO kunnen verzenden
+            /*
+            Messaging.MessageSender.SendMessage()
+            */
+
+            return "verzonden";
+
+        }
+    }
+}

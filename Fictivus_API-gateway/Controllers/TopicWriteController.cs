@@ -1,4 +1,6 @@
 ﻿using Fictivus_API_gateway.DTO;
+using Fictivus_API_gateway.Helper;
+using Flurl.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +23,7 @@ namespace Fictivus_API_gateway.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("writeMock")]
-        public async Task<ActionResult<string>> WriteMocke(TopicDTO topicDTO)
+        public async Task<ActionResult<string>> WriteMock(TopicDTO topicDTO)
         {
             //moet DTO kunnen verzenden
             /*
@@ -30,6 +32,34 @@ namespace Fictivus_API_gateway.Controllers
 
             return "verzonden";
             
+        }
+
+        // log de tijd in deze
+        [AllowAnonymous]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("writeMockCheck")]
+        public async Task<ActionResult<string>> WriteMockCheck(TopicDTO topicDTO)
+        {
+            IFlurlResponse response = await $"{Constants.TopicApiUrl}/api/search/writemock".PostJsonAsync(topicDTO);
+
+            if (response.StatusCode >= 500)
+            {
+                return StatusCode(500);
+            }
+            else if (response.StatusCode >= 400)
+            {
+                return StatusCode(400);
+            }
+            else
+            {                
+                return "geslaagd";
+            }
+
+            return "verzonden";
+
         }
 
         //moet niet anonymous zijn in toekomst

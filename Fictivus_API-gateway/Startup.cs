@@ -1,3 +1,4 @@
+using Fictivus_API_gateway.Helper;
 using Flurl.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +29,9 @@ namespace Fictivus_API_gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            Constants.AccountApiUrl = Configuration.GetValue<string>("AccountApiUrl");
+            Constants.TopicApiUrl = Configuration.GetValue<string>("TopicApiUrl");
+            Constants.WriteApiUrl = Configuration.GetValue<string>("WriteApiUrl");
             services.AddControllers();
             services.AddCors(options =>
             {

@@ -73,11 +73,11 @@ namespace Fictivus_API_gateway.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("GetPostsByTerm")]
+        [Route("GetPostsByTerm/{searchTerm}")]
         public async Task<ActionResult<List<ResponseDTO>>> GetPostsByTerm(string searchTerm)
         {
 
-            IFlurlResponse response = await $"{Constants.AccountApiUrl}/api/search/getpostsbyterm".PostJsonAsync(searchTerm);
+            IFlurlResponse response = await $"{Constants.TopicApiUrl}/api/search/getpostsbyterm/{searchTerm}".GetAsync();
 
             if (response.StatusCode >= 500)
             {

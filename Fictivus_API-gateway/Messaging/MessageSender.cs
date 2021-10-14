@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using Fictivus_API_gateway.DTO;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Fictivus_API_gateway.Messaging
     public class MessageSender
     {
         //moet DTO kunnen zenden
-        public static void SendMessage()
+        public static void SendMessage(TopicDTO topic)
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
@@ -22,14 +23,13 @@ namespace Fictivus_API_gateway.Messaging
                                      autoDelete: false,
                                      arguments: null);
 
-                string message = "";
-                var body = Encoding.UTF8.GetBytes(message);
+                var body = Encoding.UTF8.GetBytes(topic.ToString());
 
                 channel.BasicPublish(exchange: "",
-                                     routingKey: "hello",
+                                     routingKey: "write",
                                      basicProperties: null,
                                      body: body);
-                Console.WriteLine(" [x] Sent {0}", message);
+                Console.WriteLine(" [x] Sent {0}", topic);
             }
 
             Console.WriteLine(" Press [enter] to exit.");

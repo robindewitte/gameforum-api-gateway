@@ -74,7 +74,7 @@ namespace Fictivus_API_gateway.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("GetPostsByTerm/{searchTerm}")]
-        public async Task<ActionResult<List<ResponseDTO>>> GetPostsByTerm(string searchTerm)
+        public async Task<ActionResult<ICollection<ResponseDTO>>> GetPostsByTerm(string searchTerm)
         {
 
             IFlurlResponse response = await $"{Constants.TopicApiUrl}/api/search/getpostsbyterm/{searchTerm}".GetAsync();
@@ -89,8 +89,8 @@ namespace Fictivus_API_gateway.Controllers
             }
             else
             {
-                List<ResponseDTO> answer = (List<ResponseDTO>)await response.GetJsonListAsync();
-                return answer;
+               ICollection<ResponseDTO> answer = await response.GetJsonAsync<ICollection<ResponseDTO>>();
+               return Ok(answer);
             }
         }
 

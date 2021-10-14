@@ -25,10 +25,9 @@ namespace Fictivus_API_gateway.Controllers
         [Route("writeMock")]
         public async Task<ActionResult<string>> WriteMock(TopicDTO topicDTO)
         {
-            //moet DTO kunnen verzenden
-            /*
-            Messaging.MessageSender.SendMessage()
-            */
+
+            Messaging.MessageSender.SendMessage(topicDTO);
+            
 
             return "verzonden";
             

@@ -4,7 +4,10 @@ using Flurl.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,71 +15,58 @@ using System.Threading.Tasks;
 namespace Fictivus_API_gateway.Controllers
 {
     [Produces("application/json")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/write")]
     [ApiController]
     public class TopicWriteController : Controller
     {
-        //moet niet anonymous zijn in toekomst
-        [AllowAnonymous]
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("writeMock")]
-        public async Task<ActionResult<string>> WriteMock(TopicDTO topicDTO)
+        [Route("posttopic")]
+        public async Task<ActionResult<bool>> PostTopic(TopicDTO topicDTO)
         {
-
-            Messaging.MessageSender.SendMessage(topicDTO);
-            
-
-            return "verzonden";
-            
+            Messaging.MessageSender.SendMessage("posttopic", JsonConvert.SerializeObject(topicDTO));
+            return true;
         }
 
-        // log de tijd in deze
-        [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("writeMockCheck")]
-        public async Task<ActionResult<string>> WriteMockCheck(TopicDTO topicDTO)
+        [Route("postresponse")]
+        public async Task<ActionResult<bool>> PostResponse(ResponseDTO responseDTO)
         {
-            IFlurlResponse response = await $"{Constants.TopicApiUrl}/api/search/writemock".PostJsonAsync(topicDTO);
-
-            if (response.StatusCode >= 500)
-            {
-                return StatusCode(500);
-            }
-            else if (response.StatusCode >= 400)
-            {
-                return StatusCode(400);
-            }
-            else
-            {                
-                return "geslaagd";
-            }
-
-            return "verzonden";
-
+            Messaging.MessageSender.SendMessage("postresponse", JsonConvert.SerializeObject(responseDTO));
+            return true;
         }
 
-        //moet niet anonymous zijn in toekomst
-        [AllowAnonymous]
+        //moet straks weer parameter hebben
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("deleteMock")]
-        public async Task<ActionResult<string>> DeleteMocke(TopicDTO topicDTO)
+        [Route("deletetopic")]
+        public async Task<ActionResult<bool>> DeleteTopic()
         {
-            //moet DTO kunnen verzenden
-            /*
-            Messaging.MessageSender.SendMessage()
-            */
-
-            return "verzonden";
-
+            TopicDTO topicDTO = new TopicDTO("uh", "ah", DateTime.Now, "argl");
+            Messaging.MessageSender.SendMessage("deletetopic", JsonConvert.SerializeObject(topicDTO));
+            return true;
         }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("deleteresponse")]
+        public async Task<ActionResult<bool>> DeleteResponse(ResponseDTO responseDTO)
+        {
+            Messaging.MessageSender.SendMessage("deleteresponse", JsonConvert.SerializeObject(responseDTO));
+            return true;
+        }
+
+
     }
 }

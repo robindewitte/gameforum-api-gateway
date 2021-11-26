@@ -8,8 +8,6 @@ namespace Fictivus_API_gateway.DTO
     public class SearchInTopicDTO
     {
         #region fields
-        private string searchTerm;
-        private string topicTitle;
         #endregion
 
         #region constructors
@@ -21,15 +19,15 @@ namespace Fictivus_API_gateway.DTO
 
         public SearchInTopicDTO(string searchTerm, string topicTitle)
         {
-            this.SearchTerm = searchTerm;
-            this.TopicTitle = topicTitle;
+            SearchTerm = searchTerm;
+            TopicTitle = topicTitle;
         }
         #endregion
 
         #region properties
 
-        public string SearchTerm { get => searchTerm; set => searchTerm = value; }
-        public string TopicTitle { get => topicTitle; set => topicTitle = value; }
+        public string SearchTerm { get; set; }
+        public string TopicTitle { get; set; }
 
 
         #endregion

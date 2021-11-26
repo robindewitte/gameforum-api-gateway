@@ -25,7 +25,7 @@ namespace Fictivus_API_gateway.Controllers
         public async Task<ActionResult<string>> Login(LoginDTO loginDTO)
         {
             
-            IFlurlResponse response = await $"{Constants.AccountApiUrl}/api/user/login".PostJsonAsync(loginDTO);
+            IFlurlResponse response = await $"{Constants.AccountApiUrl}/api/account/login".PostJsonAsync(loginDTO);
 
             if (response.StatusCode >= 500)
             {
@@ -54,7 +54,7 @@ namespace Fictivus_API_gateway.Controllers
         [Route("register")]
         public async Task<ActionResult<string>> Register(RegisterDTO registerDTO)
         {
-            IFlurlResponse response = await $"{Constants.AccountApiUrl}/api/user/register".PostJsonAsync(registerDTO);
+            IFlurlResponse response = await $"{Constants.AccountApiUrl}/api/account/register".PostJsonAsync(registerDTO);
             if (response.StatusCode >= 500)
             {
                 return StatusCode(500);

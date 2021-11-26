@@ -8,9 +8,6 @@ namespace Fictivus_API_gateway.DTO
     public class TopicDTO
     {
         #region fields
-        private string username;
-        private string title;
-        private DateTime date;
         #endregion
 
         #region constructors
@@ -20,19 +17,22 @@ namespace Fictivus_API_gateway.DTO
 
         }
 
-        public TopicDTO(string username, string title, DateTime date)
+        public TopicDTO(string username, string title, DateTime date, string subject)
         {
-            this.Username = username;
-            this.Title = title;
-            this.Date = date;
+            Username = username;
+            Title = title;
+            TimeOfPosting = date;
+            Subject = subject;
         }
         #endregion
 
         #region properties
 
-        public string Username { get => username; set => username = value; }
-        public string Title { get => title; set => title = value; }
-        public DateTime Date { get => date; set => date = value; }
+        public string Username { get; set; }
+        public string Title { get; set; }
+        public DateTime TimeOfPosting { get; set; }
+
+        public string Subject { get; set; }
 
 
         #endregion

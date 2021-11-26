@@ -8,8 +8,6 @@ namespace Fictivus_API_gateway.DTO
     public class LoginDTO
     {
         #region fields
-        private string username;
-        private string password;
         #endregion
 
         #region constructors
@@ -21,15 +19,15 @@ namespace Fictivus_API_gateway.DTO
 
         public LoginDTO(string username, string password)
         {
-            this.Username = username;
-            this.Password = password;
+            Username = username;
+            Password = password;
         }
         #endregion
 
         #region properties
 
-        public string Username { get => username; set => username = value; }
-        public string Password { get => password; set => password = value; }
+        public string Username { get; set; }
+        public string Password { get; set; }
         #endregion
     }
 }

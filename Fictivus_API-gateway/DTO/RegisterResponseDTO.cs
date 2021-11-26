@@ -8,7 +8,6 @@ namespace Fictivus_API_gateway.DTO
     public class RegisterResponseDTO
     {
         #region fields
-        private string response;
 
         #endregion
 
@@ -21,13 +20,12 @@ namespace Fictivus_API_gateway.DTO
 
         public RegisterResponseDTO(string response)
         {
-            this.response = response;
+            this.Response = response;
         }
-
-        public string Response { get => response; set => response = value; }
         #endregion
 
         #region properties
+        public string Response { get; set; }
         #endregion
     }
 }

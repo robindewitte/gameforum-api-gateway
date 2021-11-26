@@ -8,10 +8,6 @@ namespace Fictivus_API_gateway.DTO
     public class RegisterDTO
     {
         #region fields
-        private string username;
-        private string emailAdress;
-        private string password;
-        private string confirmPassword;
         #endregion
 
         #region constructors
@@ -23,19 +19,19 @@ namespace Fictivus_API_gateway.DTO
 
         public RegisterDTO(string username, string emailAdress, string password, string confirmPassword)
         {
-            this.Username = username;
-            this.EmailAdress = emailAdress;
-            this.Password = password;
-            this.ConfirmPassword = confirmPassword;
+            Username = username;
+            EmailAdress = emailAdress;
+            Password = password;
+            ConfirmPassword = confirmPassword;
         }
         #endregion
 
         #region properties
 
-        public string Username { get => username; set => username = value; }
-        public string EmailAdress { get => emailAdress; set => emailAdress = value; }
-        public string Password { get => password; set => password = value; }
-        public string ConfirmPassword { get => confirmPassword; set => confirmPassword = value; }
+        public string Username { get; set; }
+        public string EmailAdress { get; set; }
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
 
         #endregion
 

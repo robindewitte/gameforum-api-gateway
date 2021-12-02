@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+    pkg:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: api-gateway
+        ports:
+            - "0.0.0.0:5001:5001"
+        networks:
+            - fictivus-network
+
+networks:
+    fictivus-network:
+        external: true

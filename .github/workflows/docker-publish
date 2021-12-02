@@ -13,6 +13,13 @@ jobs:
         with:
           dotnet-version: '5.0.x'
           
+       - uses: microsoft/variable-substitution@v1 
+        with:
+            files: 'appsettings.json'
+        env:
+            AccountApiUrl: "${{ secrets.ACCOUNT_URL }}"
+            TopicApiUrl: "${{ secrets.TOPIC_URL }}"     
+          
       - name: Push to Docker Hub
         uses: docker/build-push-action@v1
         with:

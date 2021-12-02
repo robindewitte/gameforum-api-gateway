@@ -11,10 +11,10 @@ COPY ["Fictivus_API-gateway.csproj", "."]
 RUN dotnet restore "./Fictivus_API-gateway.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "Fictivus_API-gateway.csproj" -c Release -o /app/build
+RUN dotnet build "Fictivus_API-gateway/Fictivus_API-gateway.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Fictivus_API-gateway.csproj" -c Release -o /app/publish
+RUN dotnet publish "Fictivus_API-gateway/Fictivus_API-gateway.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

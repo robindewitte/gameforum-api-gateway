@@ -6,7 +6,7 @@ EXPOSE 5001
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["Fictivus_API-gateway/Fictivus_API-gateway.csproj", "Fictivus_API-gateway"]
+COPY ["Fictivus_API-gateway/Fictivus_API-gateway.csproj", "Fictivus_API-gateway/"]
 RUN dotnet restore "Fictivus_API-gateway/Fictivus_API-gateway.csproj"
 COPY . .
 WORKDIR "/src/Fictivus_API-gateway"

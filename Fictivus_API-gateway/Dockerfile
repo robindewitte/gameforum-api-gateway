@@ -9,7 +9,7 @@ WORKDIR /src
 COPY ["Fictivus_API-gateway/Fictivus_API-gateway.csproj", "."]
 RUN dotnet restore "Fictivus_API-gateway/Fictivus_API-gateway.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/Fictivus_API-gateway"
 RUN dotnet build "Fictivus_API-gateway/Fictivus_API-gateway.csproj" -c Release -o /app/build
 
 FROM build AS publish

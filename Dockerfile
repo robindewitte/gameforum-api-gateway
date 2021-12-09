@@ -18,4 +18,4 @@ RUN dotnet publish "fictivusforum_API-gateway.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Fictivus_API-gateway.dll"]
+ENTRYPOINT ["dotnet", "fictivusforum_API-gateway.dll"]

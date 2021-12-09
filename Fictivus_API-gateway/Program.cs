@@ -20,7 +20,8 @@ namespace Fictivus_API_gateway
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>().
+                    UseUrls("http://*:5001");
                 });
     }
 }

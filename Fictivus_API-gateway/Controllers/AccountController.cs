@@ -19,7 +19,6 @@ namespace Fictivus_API_gateway.Controllers
 {
     [Produces("application/json")]
     [Route("api/account")]
-    [Authorize(AuthenticationSchemes = "")]
     [ApiController]
     public class AccountController : Controller
     {

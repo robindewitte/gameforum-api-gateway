@@ -32,34 +32,39 @@ namespace Fictivus_API_gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+           
             Constants.AccountApiUrl = Configuration.GetValue<string>("AccountApiUrl");
             Constants.TopicApiUrl = Configuration.GetValue<string>("TopicApiUrl");
             Constants.WriteApiUrl = Configuration.GetValue<string>("WriteApiUrl");
+            services.AddControllers();
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }
-          )
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                };
-            });
-            services.AddControllers();
+           )
+           .AddJwtBearer(options =>
+           {
+
+               options.RequireHttpsMetadata = false;
+               options.SaveToken = true;
+               options.TokenValidationParameters = new TokenValidationParameters()
+               {
+                   ValidateIssuer = true,
+                   ValidateAudience = false,
+                   ValidateIssuerSigningKey = true,
+                   ValidIssuer = Configuration["Jwt:Issuer"],
+                   ValidAudience = Configuration["Jwt:Issuer"],
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+               };
+           });
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.WithOrigins("*")
+                          builder.WithOrigins()
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowAnyOrigin();
@@ -70,6 +75,7 @@ namespace Fictivus_API_gateway
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Fictivus_API_gateway", Version = "v1" });
             });
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,10 +89,9 @@ namespace Fictivus_API_gateway
             }
 
             app.UseCors(MyAllowSpecificOrigins);
-
             app.UseHttpsRedirection();
-
-            app.UseRouting();
+            app.UseAuthentication();
+            app.UseRouting();  
 
             app.UseAuthorization();
 

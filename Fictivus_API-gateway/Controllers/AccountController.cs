@@ -8,14 +8,29 @@ using Fictivus_API_gateway.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Fictivus_API_gateway.DTO;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using System.Security.Principal;
 
 namespace Fictivus_API_gateway.Controllers
 {
     [Produces("application/json")]
     [Route("api/account")]
+    [Authorize(AuthenticationSchemes = "")]
     [ApiController]
     public class AccountController : Controller
     {
+
+        private readonly IConfiguration _config;
+
+        public AccountController(IConfiguration config)
+        {
+            _config = config;
+        }
+
         [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -38,6 +53,7 @@ namespace Fictivus_API_gateway.Controllers
             else
             {
                 string answer = await response.GetStringAsync();
+                ValidateToken(answer);
                 return answer;
             }
         }

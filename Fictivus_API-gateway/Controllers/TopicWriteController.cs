@@ -2,6 +2,7 @@
 using Fictivus_API_gateway.Helper;
 using Flurl.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -11,12 +12,15 @@ using System.Security.Claims;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Principal;
 
 namespace Fictivus_API_gateway.Controllers
 {
     [Produces("application/json")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/write")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     public class TopicWriteController : Controller
     {
@@ -28,8 +32,25 @@ namespace Fictivus_API_gateway.Controllers
         [Route("posttopic")]
         public async Task<ActionResult<bool>> PostTopic(TopicDTO topicDTO)
         {
-            Messaging.MessageSender.SendMessage("posttopic", JsonConvert.SerializeObject(topicDTO));
-            return true;
+            Microsoft.Extensions.Primitives.StringValues token;
+            bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
+            if (getmeToken)
+            {
+                if (ValidateToken(token.ToString()))
+                {
+                    Messaging.MessageSender.SendMessage("posttopic", JsonConvert.SerializeObject(topicDTO));
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+               
+            }
+            else
+            {
+                return false;
+            }
         }
 
         [HttpPost]
@@ -39,8 +60,26 @@ namespace Fictivus_API_gateway.Controllers
         [Route("postresponse")]
         public async Task<ActionResult<bool>> PostResponse(ResponseDTO responseDTO)
         {
-            Messaging.MessageSender.SendMessage("postresponse", JsonConvert.SerializeObject(responseDTO));
-            return true;
+            Microsoft.Extensions.Primitives.StringValues token;
+            bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
+            if (getmeToken)
+            {
+                if (ValidateToken(token.ToString()))
+                {
+                    Messaging.MessageSender.SendMessage("postresponse", JsonConvert.SerializeObject(responseDTO));
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                   
+            }
+            else
+            {
+                return false;
+            }
+           
         }
 
         //moet straks weer parameter hebben
@@ -51,9 +90,26 @@ namespace Fictivus_API_gateway.Controllers
         [Route("deletetopic")]
         public async Task<ActionResult<bool>> DeleteTopic()
         {
-            TopicDTO topicDTO = new TopicDTO("uh", "ah", DateTime.Now, "argl");
-            Messaging.MessageSender.SendMessage("deletetopic", JsonConvert.SerializeObject(topicDTO));
-            return true;
+            Microsoft.Extensions.Primitives.StringValues token;
+            bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
+            if (getmeToken)
+            {
+                if (ValidateToken(token.ToString()))
+                {
+                    TopicDTO topicDTO = new TopicDTO("uh", "ah", DateTime.Now, "argl");
+                    Messaging.MessageSender.SendMessage("deletetopic", JsonConvert.SerializeObject(topicDTO));
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+           
         }
 
         [HttpPost]
@@ -63,10 +119,47 @@ namespace Fictivus_API_gateway.Controllers
         [Route("deleteresponse")]
         public async Task<ActionResult<bool>> DeleteResponse(ResponseDTO responseDTO)
         {
-            Messaging.MessageSender.SendMessage("deleteresponse", JsonConvert.SerializeObject(responseDTO));
-            return true;
+            Microsoft.Extensions.Primitives.StringValues token;
+            bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
+            if (ValidateToken(token.ToString()))
+            {
+                Messaging.MessageSender.SendMessage("deleteresponse", JsonConvert.SerializeObject(responseDTO));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+
+        public bool ValidateToken (string token)
+        {
+            token = token.Substring(7);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = GetValidationParameters();
+            try
+            {
+                SecurityToken validatedToken;
+                IPrincipal principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }      
         }
 
-
+        private static TokenValidationParameters GetValidationParameters()
+        {
+            return new TokenValidationParameters()
+            {
+                ValidateLifetime = false, // Because there is no expiration in the generated token
+                ValidateAudience = false, // Because there is no audiance in the generated token
+                ValidateIssuer = false,   // Because there is no issuer in the generated token
+                ValidIssuer = "Test.com",
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisismySecretKey")) // The same key as the one that generate the token
+            };
+        }
     }
 }

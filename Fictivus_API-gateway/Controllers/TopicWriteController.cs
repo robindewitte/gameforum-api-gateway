@@ -36,7 +36,7 @@ namespace Fictivus_API_gateway.Controllers
             bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
             if (getmeToken)
             {
-                if (ValidateToken(token.ToString()))
+                if (ValidateToken(token.ToString()) && ValidateUsername(token.ToString(), topicDTO.Username))
                 {
                     Messaging.MessageSender.SendMessage("posttopic", JsonConvert.SerializeObject(topicDTO));
                     return true;
@@ -64,7 +64,7 @@ namespace Fictivus_API_gateway.Controllers
             bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
             if (getmeToken)
             {
-                if (ValidateToken(token.ToString()))
+                if (ValidateToken(token.ToString()) && ValidateUsername(token.ToString(), responseDTO.UserName))
                 {
                     Messaging.MessageSender.SendMessage("postresponse", JsonConvert.SerializeObject(responseDTO));
                     return true;
@@ -148,6 +148,23 @@ namespace Fictivus_API_gateway.Controllers
             {
                 return false;
             }      
+        }
+
+        public bool ValidateUsername(string token, string username)
+        {
+            token = token.Substring(7);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var securityToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+
+            var stringClaimValue = securityToken.Claims.First(claim => claim.Type == "sub").Value;
+            if(stringClaimValue == username)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private static TokenValidationParameters GetValidationParameters()

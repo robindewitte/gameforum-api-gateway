@@ -53,7 +53,6 @@ namespace Fictivus_API_gateway.Controllers
             else
             {
                 string answer = await response.GetStringAsync();
-                ValidateToken(answer);
                 return answer;
             }
         }

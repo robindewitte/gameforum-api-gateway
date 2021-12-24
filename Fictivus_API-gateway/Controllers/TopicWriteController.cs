@@ -32,24 +32,20 @@ namespace Fictivus_API_gateway.Controllers
         [Route("posttopic")]
         public async Task<ActionResult<bool>> PostTopic(TopicDTO topicDTO)
         {
-            Microsoft.Extensions.Primitives.StringValues token;
-            bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
-            if (getmeToken)
+            IFlurlResponse response = await $"{Constants.WriteApiUrl}/api/write/PostTopic".PostJsonAsync(topicDTO);
+
+            if (response.StatusCode >= 500)
             {
-                if (ValidateToken(token.ToString()) && ValidateUsername(token.ToString(), topicDTO.Username))
-                {
-                    Messaging.MessageSender.SendMessage("posttopic", JsonConvert.SerializeObject(topicDTO));
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-               
+                return StatusCode(500);
+            }
+            else if (response.StatusCode >= 400)
+            {
+                return StatusCode(400);
             }
             else
             {
-                return false;
+                bool answer = response.GetJsonAsync<bool>().Result;
+                return Ok(answer);
             }
         }
 
@@ -60,26 +56,22 @@ namespace Fictivus_API_gateway.Controllers
         [Route("postresponse")]
         public async Task<ActionResult<bool>> PostResponse(ResponseDTO responseDTO)
         {
-            Microsoft.Extensions.Primitives.StringValues token;
-            bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
-            if (getmeToken)
+            IFlurlResponse response = await $"{Constants.WriteApiUrl}/api/write/PostResponse".PostJsonAsync(responseDTO);
+
+            if (response.StatusCode >= 500)
             {
-                if (ValidateToken(token.ToString()) && ValidateUsername(token.ToString(), responseDTO.UserName))
-                {
-                    Messaging.MessageSender.SendMessage("postresponse", JsonConvert.SerializeObject(responseDTO));
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-                   
+                return StatusCode(500);
+            }
+            else if (response.StatusCode >= 400)
+            {
+                return StatusCode(400);
             }
             else
             {
-                return false;
+                bool answer = response.GetJsonAsync<bool>().Result;
+                return Ok(answer);
             }
-           
+
         }
 
         //moet straks weer parameter hebben
@@ -88,28 +80,24 @@ namespace Fictivus_API_gateway.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("deletetopic")]
-        public async Task<ActionResult<bool>> DeleteTopic()
+        public async Task<ActionResult<bool>> DeleteTopic(TopicDTO topicDTO)
         {
-            Microsoft.Extensions.Primitives.StringValues token;
-            bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
-            if (getmeToken)
+            IFlurlResponse response = await $"{Constants.WriteApiUrl}/api/write/DeleteTopic".PostJsonAsync(topicDTO);
+
+            if (response.StatusCode >= 500)
             {
-                if (ValidateToken(token.ToString()))
-                {
-                    TopicDTO topicDTO = new TopicDTO("uh", "ah", DateTime.Now, "argl");
-                    Messaging.MessageSender.SendMessage("deletetopic", JsonConvert.SerializeObject(topicDTO));
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return StatusCode(500);
+            }
+            else if (response.StatusCode >= 400)
+            {
+                return StatusCode(400);
             }
             else
             {
-                return false;
+                bool answer = response.GetJsonAsync<bool>().Result;
+                return Ok(answer);
             }
-           
+
         }
 
         [HttpPost]
@@ -119,16 +107,20 @@ namespace Fictivus_API_gateway.Controllers
         [Route("deleteresponse")]
         public async Task<ActionResult<bool>> DeleteResponse(ResponseDTO responseDTO)
         {
-            Microsoft.Extensions.Primitives.StringValues token;
-            bool getmeToken = Request.Headers.TryGetValue("Authorization", out token);
-            if (ValidateToken(token.ToString()))
+            IFlurlResponse response = await $"{Constants.WriteApiUrl}/api/write/DeleteResponse".PostJsonAsync(responseDTO);
+
+            if (response.StatusCode >= 500)
             {
-                Messaging.MessageSender.SendMessage("deleteresponse", JsonConvert.SerializeObject(responseDTO));
-                return true;
+                return StatusCode(500);
+            }
+            else if (response.StatusCode >= 400)
+            {
+                return StatusCode(400);
             }
             else
             {
-                return false;
+                bool answer = response.GetJsonAsync<bool>().Result;
+                return Ok(answer);
             }
         }
         

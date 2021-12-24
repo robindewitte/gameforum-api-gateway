@@ -62,7 +62,8 @@ jobs:
             files: 'Fictivus_API-gateway/appsettings.json'
         env:
            AccountApiUrl: "${{ secrets.ACCOUNT_URL }}"
-           TopicApiUrl: "${{ secrets.TOPIC_URL }}"     
+           TopicApiUrl: "${{ secrets.TOPIC_URL }}" 
+           WriteApiUrl: "${{ secrets.WRITE_URL }}"
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
